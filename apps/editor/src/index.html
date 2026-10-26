@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dotflash · Design and print temporary tattoos</title>
+    <meta
+      name="description"
+      content="Design temporary tattoos in your browser and print them over Bluetooth. Arrange, shade and preview every dot before it prints."
+    />
+    <link rel="canonical" href="https://craigory.dev/dotflash/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://craigory.dev/dotflash/" />
+    <meta property="og:title" content="Dotflash" />
+    <meta property="og:description" content="Design temporary tattoos in your browser and print them over Bluetooth." />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Dotflash",
+        "url": "https://craigory.dev/dotflash/",
+        "description": "Design temporary tattoos in your browser and print them over Bluetooth.",
+        "applicationCategory": "DesignApplication",
+        "operatingSystem": "Windows, macOS, Linux, ChromeOS, Android",
+        "browserRequirements": "Requires Web Bluetooth (Chrome, Edge or Opera)",
+        "offers": { "@type": "Offer", "price": "0" }
+      }
+    </script>
+    <!-- With JavaScript, main.tsx opens the welcome dialog as a modal. Without it, the dialog shows as static content. -->
+    <script>
+      document.documentElement.classList.add("js");
+    </script>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <dialog id="welcome" open aria-labelledby="welcome-title">
+      <h1 id="welcome-title">Dotflash</h1>
+      <p class="lede">Design temporary tattoos in your browser and print them over Bluetooth.</p>
+      <p>Arrange your artwork on the sheet, remove backgrounds, and preview every dot before it prints.</p>
+      <p class="browser-notice" hidden>
+        This browser can't print. You can still design here, but printing needs Chrome, Edge or Opera on desktop or
+        Android.
+      </p>
+
+      <h2>Works with</h2>
+      <dl class="compat">
+        <dt>Printer</dt>
+        <dd>Hello Blink tattoo maker, listed as <code>WS-171C</code></dd>
+        <dt>Paper</dt>
+        <dd>50 × 69 mm transfer sheets</dd>
+      </dl>
+
+      <h2>Before you print</h2>
+      <ul>
+        <li>Close the printer's phone app. The printer only talks to one device at a time.</li>
+        <li>Hold the lid down while it prints, so the right edge comes out dark.</li>
+        <li>Your images never leave this device.</li>
+      </ul>
+
+      <form method="dialog">
+        <button class="primary">Start designing</button>
+      </form>
+      <p class="source">
+        Free software under the AGPL. <a href="https://github.com/AgentEnder/dotflash">Source on GitHub</a>
+      </p>
+    </dialog>
+    <div id="root"></div>
+    <script type="module" src="./main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,378 @@
+:root {
+  --table: #1d1e20;
+  --panel: #26282b;
+  --line: #3a3d41;
+  --text: #e6e4df;
+  --muted: #9a9894;
+  --accent: #ff5a1f; /* printer status-light orange, the only accent */
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  color-scheme: dark;
+  font: 13px/1.4 system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--table);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  height: 100dvh;
+}
+
+.table {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 24px;
+}
+
+.table.dragging {
+  outline: 2px dashed var(--accent);
+  outline-offset: -12px;
+}
+
+.sheet-size {
+  position: absolute;
+  bottom: 10px;
+  left: 14px;
+  font-family: var(--mono);
+  color: var(--muted);
+}
+
+.stages {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.stages button {
+  border: 0;
+  border-radius: 0;
+}
+
+.stages button + button {
+  border-left: 1px solid var(--line);
+}
+
+.stages button[aria-current="step"] {
+  background: var(--text);
+  color: var(--table);
+}
+
+.panel {
+  overflow-y: auto;
+  border-left: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.section {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.section h2 {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.row > * {
+  flex: 1;
+}
+
+label {
+  display: grid;
+  gap: 4px;
+}
+
+label.check {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.value {
+  font-family: var(--mono);
+  color: var(--muted);
+  float: right;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--text);
+}
+
+button,
+select {
+  font: inherit;
+  color: var(--text);
+  background: #303337;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: var(--muted);
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #1d1e20;
+  font-weight: 600;
+  padding: 10px;
+}
+
+.status {
+  font-family: var(--mono);
+  color: var(--muted);
+}
+
+.error {
+  color: var(--accent);
+}
+
+progress {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.hint {
+  color: var(--muted);
+  margin: 0;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
+  margin: 0;
+}
+
+.stats dt {
+  color: var(--muted);
+}
+
+.stats dd {
+  margin: 0;
+  font-family: var(--mono);
+}
+
+.arrange {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.arrange-actions {
+  display: grid;
+  flex: 1;
+  gap: 6px;
+}
+
+.waffle {
+  display: grid;
+  grid-template-columns: repeat(3, 26px);
+  grid-template-rows: repeat(3, 26px);
+  gap: 3px;
+}
+
+.waffle-cell {
+  position: relative;
+  padding: 0;
+}
+
+/* A small block sits at the cell's anchor, so the grid previews where the artwork goes. */
+.waffle-cell::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--muted);
+  border-radius: 1px;
+}
+
+.waffle-cell.h-start::after {
+  left: 4px;
+}
+.waffle-cell.h-center::after {
+  left: calc(50% - 4px);
+}
+.waffle-cell.h-end::after {
+  right: 4px;
+}
+.waffle-cell.v-start::after {
+  top: 4px;
+}
+.waffle-cell.v-center::after {
+  top: calc(50% - 4px);
+}
+.waffle-cell.v-end::after {
+  bottom: 4px;
+}
+
+.waffle-cell:hover::after {
+  background: var(--accent);
+}
+
+/* Takes the place of the button it replaces, so the panel doesn't shift while it runs. */
+.inline-progress {
+  position: relative;
+  overflow: hidden;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #303337;
+  color: var(--text);
+  text-align: center;
+  isolation: isolate;
+}
+
+.inline-progress::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: calc(var(--progress) * 100%);
+  background: color-mix(in srgb, var(--accent) 45%, transparent);
+  transition: width 0.2s;
+}
+
+.inline-progress.indeterminate::before {
+  width: 40%;
+  animation: sweep 1.2s ease-in-out infinite;
+}
+
+@keyframes sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+.about {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+}
+
+/* With JavaScript the dialog only shows as a modal. Without it, the static open dialog stays visible. */
+.js #welcome:not(:modal) {
+  display: none;
+}
+
+#welcome {
+  max-width: 560px;
+  max-height: calc(100dvh - 48px);
+  padding: 24px 28px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--text);
+}
+
+#welcome::backdrop {
+  background: rgb(0 0 0 / 0.6);
+}
+
+#welcome h1 {
+  margin: 0 0 4px;
+  font-size: 22px;
+  line-height: 1.25;
+}
+
+#welcome h2 {
+  margin: 20px 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+#welcome p,
+#welcome ul {
+  margin: 0 0 8px;
+}
+
+#welcome ul {
+  padding-left: 18px;
+}
+
+#welcome li + li {
+  margin-top: 4px;
+}
+
+#welcome code {
+  font-family: var(--mono);
+}
+
+#welcome form {
+  display: grid;
+  margin-top: 20px;
+}
+
+.compat {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  margin: 0 0 8px;
+}
+
+.compat dt {
+  color: var(--muted);
+}
+
+.compat dd {
+  margin: 0;
+}
+
+.browser-notice {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  color: var(--accent);
+}
+
+#welcome .lede {
+  font-size: 15px;
+}
+
+#welcome .source {
+  margin: 12px 0 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+#welcome a {
+  color: var(--text);
+}
