@@ -1,0 +1,16 @@
+{
+  "name": "@dotflash/cli",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "dotflash": "./src/cli.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "@dotflash/printer": "workspace:*",
+    "@stoprocent/noble": "^2.8.0",
+    "sharp": "^0.35.5"
+  }
+}
